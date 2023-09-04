@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~  * Copyright (c)  2021  Shabinder Singh
   ~  * This program is free software: you can redistribute it and/or modify
   ~  * it under the terms of the GNU General Public License as published by
@@ -28,15 +27,17 @@
         <package android:name="com.google.android.apps.youtube.music" />
     </queries>
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
     <uses-permission android:name="android.permission.READ_STORAGE_PERMISSION" />
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         tools:ignore="ProtectedPermissions,ScopedStorage" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -45,35 +46,34 @@
     <application
         android:name=".App"
         android:allowBackup="false"
-        android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
-        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
-        android:icon="@mipmap/ic_launcher"
-        android:hardwareAccelerated="true"
-        android:largeHeap="true"
-        android:label="SpotiFlyer"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:configChanges="orientation|screenSize"
-        android:forceDarkAllowed="true"
         android:extractNativeLibs="true"
+        android:forceDarkAllowed="true"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="SpotiFlyer"
+        android:largeHeap="true"
         android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        android:usesCleartextTraffic="true"
         tools:targetApi="q">
         <activity
             android:name=".ui.SplashScreenActivity"
-            android:theme="@style/SplashTheme"
             android:hardwareAccelerated="true"
-            >
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <activity android:name=".MainActivity"
-            android:launchMode="singleTask"
+        <activity
+            android:name=".MainActivity"
             android:hardwareAccelerated="true"
-            android:theme="@style/Theme.SpotiFlyer"
-            >
+            android:launchMode="singleTask"
+            android:theme="@style/Theme.SpotiFlyer">
             <intent-filter>
                 <category android:name="android.intent.category.DEFAULT" />
                 <action android:name="android.intent.action.SEND" />
@@ -81,15 +81,19 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".service.ForegroundService"/>
-        <service android:name="org.openudid.OpenUDID_service"
+        <service android:name=".service.ForegroundService" />
+        <service android:name=".service.AudioPlaybackService" />
+        <service
+            android:name="org.openudid.OpenUDID_service"
             tools:ignore="ExportedService,IntentFilterExportedReceiver">
             <intent-filter>
                 <action android:name="org.openudid.GETUDID" />
             </intent-filter>
         </service>
 
-        <receiver android:name="ly.count.android.sdk.ReferrerReceiver" android:exported="true"
+        <receiver
+            android:name="ly.count.android.sdk.ReferrerReceiver"
+            android:exported="true"
             tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />

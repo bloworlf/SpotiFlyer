@@ -1,0 +1,15 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="40dp"
+    android:height="40dp"
+    android:viewportWidth="512"
+    android:viewportHeight="512">
+
+    <!-- Change the pathData to create a play button -->
+    <path
+        android:pathData="M155,70 L370,256 L155,442 L155,70 Z"
+        android:fillColor="#748AFF" />
+
+    <path
+        android:fillColor="#000000"
+        android:pathData="M175,395.246c-4.035,0 -7.902,-1.629 -10.727,-4.512l-81,-82.832c-5.789,-5.922 -5.684,-15.418 0.238,-21.211 5.922,-5.793 15.418,-5.688 21.211,0.238l70.273,71.859 232.277,-237.523c5.793,-5.922 15.289,-6.027 21.211,-0.234 5.926,5.789 6.031,15.289 0.238,21.211l-243,248.492c-2.82,2.883 -6.688,4.512 -10.723,4.512zM175,395.246" />
+</vector>

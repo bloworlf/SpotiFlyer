@@ -90,3 +90,6 @@ expect fun DownloadImageError(modifier: Modifier)
 
 @Composable
 expect fun DownloadImageArrow(modifier: Modifier)
+
+@Composable
+expect fun DownloadImagePlay(modifier: Modifier)

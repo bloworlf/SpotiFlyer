@@ -25,6 +25,7 @@ internal interface SpotiFlyerListStore : Store<Intent, State, Nothing> {
     sealed class Intent {
         data class SearchLink(val link: String) : Intent()
         data class StartDownload(val track: TrackDetails) : Intent()
+        data class PlayDownload(val track: TrackDetails) : Intent()
         data class StartDownloadAll(val trackList: List<TrackDetails>) : Intent()
         object RefreshTracksStatuses : Intent()
     }

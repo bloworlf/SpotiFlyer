@@ -63,6 +63,10 @@ internal class SpotiFlyerListImpl(
         store.accept(Intent.StartDownload(track))
     }
 
+    override fun onPlayClicked(track: TrackDetails) {
+        store.accept(Intent.PlayDownload(track))
+    }
+
     override fun onBackPressed() {
         listOutput.callback(SpotiFlyerList.Output.Finished)
     }

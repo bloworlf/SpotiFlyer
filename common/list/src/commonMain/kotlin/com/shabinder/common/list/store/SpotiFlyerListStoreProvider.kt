@@ -144,6 +144,17 @@ internal class SpotiFlyerListStoreProvider(dependencies: SpotiFlyerList.Dependen
                     }
 
                     is Intent.RefreshTracksStatuses -> Actions.instance.queryActiveTracks()
+
+                    is Intent.PlayDownload -> {
+//                        playTrack(intent.track)
+                        //start service
+//                        val serviceIntent = Intent(context, AudioPlaybackService::class.java).apply {
+//                            putExtra(AudioPlaybackService.EXTRA_TRACK_DETAILS, trackDetails)
+//                        }
+//
+//                        context.startForegroundService(serviceIntent)
+                        Actions.instance.playDownload(intent.track)
+                    }
                 }
             }
         }

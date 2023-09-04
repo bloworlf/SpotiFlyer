@@ -39,6 +39,8 @@ interface Actions {
     fun openPlatform(packageID: String, platformLink: String)
     fun writeMp3Tags(trackDetails: TrackDetails)
 
+    fun playDownload(trackDetails: TrackDetails)
+
     companion object {
         /*
         * Holder to call platform actions from anywhere
@@ -65,6 +67,7 @@ private fun stubActions(): Actions = object : Actions {
 
     override fun openPlatform(packageID: String, platformLink: String) {}
     override fun writeMp3Tags(trackDetails: TrackDetails) {}
+    override fun playDownload(trackDetails: TrackDetails) {}
 
     override val isInternetAvailable: Boolean = true
 }

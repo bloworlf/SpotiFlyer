@@ -88,7 +88,7 @@ interface SpotiFlyerMain {
     )
 
     enum class HomeCategory {
-        About, History
+        About, History, Downloads
     }
 }
 

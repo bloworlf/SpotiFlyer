@@ -56,6 +56,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults.textFieldColors
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Download
 import androidx.compose.material.icons.outlined.History
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.rounded.CardGiftcard
@@ -139,6 +140,8 @@ fun SpotiFlyerMainContent(component: SpotiFlyerMain) {
                 component::loadImage,
                 component::onLinkSearch
             )
+
+            HomeCategory.Downloads -> DownloadsColumn()
         }
     }
 }
@@ -172,6 +175,7 @@ fun HomeTabBar(
                         text = when (category) {
                             HomeCategory.About -> Strings.about()
                             HomeCategory.History -> Strings.history()
+                            HomeCategory.Downloads -> Strings.downloads()
                         },
                         style = MaterialTheme.typography.body2
                     )
@@ -180,6 +184,7 @@ fun HomeTabBar(
                     when (category) {
                         HomeCategory.About -> Icon(Icons.Outlined.Info, Strings.infoTab())
                         HomeCategory.History -> Icon(Icons.Outlined.History, Strings.historyTab())
+                        HomeCategory.Downloads -> Icon(Icons.Outlined.Download, Strings.downloadsTab())
                     }
                 }
             )
@@ -516,6 +521,9 @@ fun HistoryColumn(
 }
 
 @Composable
+fun DownloadsColumn(){}
+
+@Composable
 fun DownloadRecordItem(
     item: DownloadRecord,
     loadImage: suspend (String) -> Picture,
@@ -528,7 +536,15 @@ fun DownloadRecordItem(
             Strings.albumArt(),
             modifier = Modifier.height(70.dp).width(70.dp).clip(SpotiFlyerShapes.medium)
         )
-        Column(modifier = Modifier.padding(horizontal = 8.dp).height(60.dp).weight(1f), verticalArrangement = Arrangement.SpaceEvenly) {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 8.dp)
+                .height(60.dp).weight(1f)
+//                .clickable {
+//                }
+            ,
+            verticalArrangement = Arrangement.SpaceEvenly
+        ) {
             Text(item.name, maxLines = 1, overflow = TextOverflow.Ellipsis, style = SpotiFlyerTypography.h6, color = colorAccent)
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,

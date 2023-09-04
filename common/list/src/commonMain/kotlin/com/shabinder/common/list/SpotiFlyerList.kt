@@ -45,6 +45,11 @@ interface SpotiFlyerList {
     fun onDownloadClicked(track: TrackDetails)
 
     /*
+    * Play the track (if already downloaded)
+    * */
+    fun onPlayClicked(track: TrackDetails)
+
+    /*
     * To Pop and return back to Main Screen
     * */
     fun onBackPressed()

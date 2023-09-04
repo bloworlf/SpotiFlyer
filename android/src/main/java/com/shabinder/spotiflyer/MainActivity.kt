@@ -68,6 +68,7 @@ import com.shabinder.common.translations.Strings
 import com.shabinder.common.uikit.configurations.SpotiFlyerTheme
 import com.shabinder.common.uikit.configurations.colorOffWhite
 import com.shabinder.common.uikit.screens.SpotiFlyerRootContent
+import com.shabinder.spotiflyer.service.AudioPlaybackService
 import com.shabinder.spotiflyer.service.ForegroundService
 import com.shabinder.spotiflyer.ui.AnalyticsDialog
 import com.shabinder.spotiflyer.ui.NetworkDialog
@@ -352,6 +353,19 @@ class MainActivity : ComponentActivity() {
 
                     override fun writeMp3Tags(trackDetails: TrackDetails) {
                         /*IMPLEMENTED*/
+                    }
+
+                    override fun playDownload(trackDetails: TrackDetails) {
+                        val serviceIntent =
+                            Intent(this@MainActivity, AudioPlaybackService::class.java).apply {
+                                putExtra(AudioPlaybackService.EXTRA_TRACK_DETAILS, trackDetails)
+                            }
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                            startForegroundService(serviceIntent)
+                        } else {
+                            startService(serviceIntent)
+                        }
                     }
 
                     override val isInternetAvailable get() = internetAvailability.value ?: true

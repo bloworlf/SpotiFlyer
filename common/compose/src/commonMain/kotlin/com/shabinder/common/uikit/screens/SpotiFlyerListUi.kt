@@ -62,6 +62,7 @@ import com.shabinder.common.translations.Strings
 import com.shabinder.common.uikit.DownloadAllImage
 import com.shabinder.common.uikit.DownloadImageArrow
 import com.shabinder.common.uikit.DownloadImageError
+import com.shabinder.common.uikit.DownloadImagePlay
 import com.shabinder.common.uikit.DownloadImageTick
 import com.shabinder.common.uikit.ImageLoad
 import com.shabinder.common.uikit.VerticalScrollbar
@@ -112,6 +113,7 @@ fun SpotiFlyerListContent(
                         TrackCard(
                             track = item,
                             downloadTrack = { component.onDownloadClicked(item) },
+                            playTrack = { component.onPlayClicked(item) },
                             loadImage = { component.loadImage(item.albumArtURL) }
                         )
                     }
@@ -153,6 +155,7 @@ fun SpotiFlyerListContent(
 fun TrackCard(
     track: TrackDetails,
     downloadTrack: () -> Unit,
+    playTrack: () -> Unit,
     loadImage: suspend () -> Picture
 ) {
     Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
@@ -178,7 +181,15 @@ fun TrackCard(
         }
         when (track.downloaded) {
             is DownloadStatus.Downloaded -> {
-                DownloadImageTick()
+//                DownloadImageTick()
+//                Thread(Runnable {  }).start()
+                DownloadImagePlay(
+                    Modifier.clickable(
+                        onClick = {
+                            playTrack()
+                        }
+                    )
+                )
             }
             is DownloadStatus.Queued -> {
                 CircularProgressIndicator()

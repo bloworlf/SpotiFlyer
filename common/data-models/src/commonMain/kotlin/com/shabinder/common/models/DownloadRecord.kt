@@ -23,4 +23,6 @@ data class DownloadRecord(
     var link: String,
     var coverUrl: String,
     var totalFiles: Long = 1,
+    var totalLength: Long = 0,
+    var downloadedLength: Long = 0
 )
