@@ -1,5 +1,6 @@
 package com.shabinder.spotiflyer.service
 
+import android.content.Intent
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.DefaultRenderersFactory
@@ -39,6 +40,13 @@ class MusicPlayerService : MediaLibraryService() {// MediaSessionService() {
                     return Futures.immediateFuture(updatedMediaItems)
                 }
             }).build()
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        super.onStartCommand(intent, flags, startId)
+//        return super.onStartCommand(intent, flags, startId)
+
+        return START_STICKY
     }
 
     override fun onGetSession(controllerInfo: MediaSession.ControllerInfo): MediaLibrarySession? {

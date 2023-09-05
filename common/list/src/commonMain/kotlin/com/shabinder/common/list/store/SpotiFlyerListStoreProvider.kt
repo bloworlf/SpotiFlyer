@@ -31,7 +31,6 @@ import com.shabinder.common.providers.downloadTracks
 import com.shabinder.common.utils.runOnDefault
 import com.shabinder.common.utils.runOnMain
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.withContext
 
 internal class SpotiFlyerListStoreProvider(dependencies: SpotiFlyerList.Dependencies) :
@@ -153,11 +152,11 @@ internal class SpotiFlyerListStoreProvider(dependencies: SpotiFlyerList.Dependen
 //                        }
 //
 //                        context.startForegroundService(serviceIntent)
-                        Actions.instance.playDownload(intent.track)
+                        Actions.instance.playMedia(intent.track)
                     }
 
                     is Intent.PauseDownload -> {
-                        Actions.instance.pauseDownload(intent.track)
+                        Actions.instance.pauseMedia(intent.track)
                     }
                 }
             }

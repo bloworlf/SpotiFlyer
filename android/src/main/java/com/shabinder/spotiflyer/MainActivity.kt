@@ -74,7 +74,6 @@ import com.shabinder.common.translations.Strings
 import com.shabinder.common.uikit.configurations.SpotiFlyerTheme
 import com.shabinder.common.uikit.configurations.colorOffWhite
 import com.shabinder.common.uikit.screens.SpotiFlyerRootContent
-import com.shabinder.spotiflyer.service.AudioPlaybackService
 import com.shabinder.spotiflyer.service.ForegroundService
 import com.shabinder.spotiflyer.service.MusicPlayerService
 import com.shabinder.spotiflyer.ui.AnalyticsDialog
@@ -202,9 +201,9 @@ class MainActivity : ComponentActivity() {
         val sessionToken =
             SessionToken(applicationContext, ComponentName(this, MusicPlayerService::class.java))
         /* Instantiating our MediaController and linking it to the service using the session token */
-        val mediacontrollerFuture = MediaController.Builder(this, sessionToken).buildAsync()
-        mediacontrollerFuture.addListener({
-            player = mediacontrollerFuture.get()
+        val mediaControllerFuture = MediaController.Builder(this, sessionToken).buildAsync()
+        mediaControllerFuture.addListener({
+            player = mediaControllerFuture.get()
         }, MoreExecutors.directExecutor())
     }
 
@@ -378,7 +377,7 @@ class MainActivity : ComponentActivity() {
                         /*IMPLEMENTED*/
                     }
 
-                    override fun playDownload(trackDetails: TrackDetails) {
+                    override fun playMedia(trackDetails: TrackDetails) {
 //                        val serviceIntent =
 //                            Intent(this@MainActivity, AudioPlaybackService::class.java).apply {
 //                                putExtra(AudioPlaybackService.EXTRA_TRACK_DETAILS, trackDetails)
@@ -394,7 +393,7 @@ class MainActivity : ComponentActivity() {
                         }
                     }
 
-                    override fun pauseDownload(trackDetails: TrackDetails) {
+                    override fun pauseMedia(trackDetails: TrackDetails) {
                         runOnUiThread {
                             player.pause()
                         }

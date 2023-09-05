@@ -44,6 +44,9 @@ import androidx.compose.material.icons.rounded.Info
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -83,6 +86,7 @@ fun SpotiFlyerListContent(
     modifier: Modifier = Modifier
 ) {
     val model by component.model.subscribeAsState()
+    var playing by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(model.errorOccurred) {
         /*Handle if Any Exception Occurred*/
@@ -118,9 +122,16 @@ fun SpotiFlyerListContent(
                     itemsIndexed(model.trackList) { _, item ->
                         TrackCard(
                             track = item,
+                            playing = item.outputFilePath==playing,
                             downloadTrack = { component.onDownloadClicked(item) },
-                            playTrack = { component.onPlayClicked(item) },
-                            pauseTrack = { component.onPauseClicked(item) },
+                            playTrack = {
+                                component.onPlayClicked(item)
+                                playing = item.outputFilePath
+                                        },
+                            pauseTrack = {
+                                component.onPauseClicked(item)
+                                playing = null
+                                         },
                             loadImage = { component.loadImage(item.albumArtURL) }
                         )
                     }
@@ -161,6 +172,7 @@ fun SpotiFlyerListContent(
 @Composable
 fun TrackCard(
     track: TrackDetails,
+    playing: Boolean = false,
     downloadTrack: () -> Unit,
     playTrack: () -> Unit,
     pauseTrack: () -> Unit,
@@ -207,7 +219,8 @@ fun TrackCard(
         when (track.downloaded) {
             is DownloadStatus.Downloaded -> {
 //                DownloadImageTick()
-                if (track.playing == PlayStatus.Playing) {
+//                if (track.playing == PlayStatus.Playing) {
+                if (playing) {
                     DownloadImagePause(
                         Modifier.clickable(
                             onClick = {

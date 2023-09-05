@@ -521,7 +521,9 @@ fun HistoryColumn(
 }
 
 @Composable
-fun DownloadsColumn(){}
+fun DownloadsColumn(){
+
+}
 
 @Composable
 fun DownloadRecordItem(
