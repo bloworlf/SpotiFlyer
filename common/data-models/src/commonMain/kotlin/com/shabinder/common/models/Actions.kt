@@ -40,6 +40,7 @@ interface Actions {
     fun writeMp3Tags(trackDetails: TrackDetails)
 
     fun playDownload(trackDetails: TrackDetails)
+    fun pauseDownload(trackDetails: TrackDetails)
 
     companion object {
         /*
@@ -68,6 +69,7 @@ private fun stubActions(): Actions = object : Actions {
     override fun openPlatform(packageID: String, platformLink: String) {}
     override fun writeMp3Tags(trackDetails: TrackDetails) {}
     override fun playDownload(trackDetails: TrackDetails) {}
+    override fun pauseDownload(trackDetails: TrackDetails) {}
 
     override val isInternetAvailable: Boolean = true
 }

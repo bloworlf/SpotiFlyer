@@ -155,6 +155,10 @@ internal class SpotiFlyerListStoreProvider(dependencies: SpotiFlyerList.Dependen
 //                        context.startForegroundService(serviceIntent)
                         Actions.instance.playDownload(intent.track)
                     }
+
+                    is Intent.PauseDownload -> {
+                        Actions.instance.pauseDownload(intent.track)
+                    }
                 }
             }
         }
@@ -170,6 +174,7 @@ internal class SpotiFlyerListStoreProvider(dependencies: SpotiFlyerList.Dependen
                     trackList = result.trackList,
                     link = link
                 )
+
                 is Result.UpdateTrackList -> copy(trackList = result.list)
                 is Result.UpdateTrackItem -> updateTrackItem(result.item)
                 is Result.ErrorOccurred -> copy(errorOccurred = result.error)

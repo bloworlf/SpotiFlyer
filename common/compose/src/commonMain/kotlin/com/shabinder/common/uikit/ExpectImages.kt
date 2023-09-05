@@ -93,3 +93,4 @@ expect fun DownloadImageArrow(modifier: Modifier)
 
 @Composable
 expect fun DownloadImagePlay(modifier: Modifier)
+expect fun DownloadImagePause(modifier: Modifier)

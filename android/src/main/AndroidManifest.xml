@@ -90,6 +90,17 @@
                 <action android:name="org.openudid.GETUDID" />
             </intent-filter>
         </service>
+        <service
+            android:name=".service.MusicPlayerService"
+            android:enabled="true"
+            android:exported="true"
+            android:foregroundServiceType="mediaPlayback"
+            tools:ignore="ExportedService">
+            <intent-filter>
+                <action android:name="androidx.media3.session.MediaLibraryService" />
+                <action android:name="android.media.browse.MediaBrowserService" />
+            </intent-filter>
+        </service>
 
         <receiver
             android:name="ly.count.android.sdk.ReferrerReceiver"
@@ -97,6 +108,15 @@
             tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name=".broadcast.AudioPlaybackReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.shabinder.spotiflyer.AudioPlayback.PAUSE" />
+                <action android:name="com.shabinder.spotiflyer.AudioPlayback.PLAY" />
             </intent-filter>
         </receiver>
     </application>

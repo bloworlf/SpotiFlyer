@@ -52,6 +52,15 @@ actual fun DownloadImagePlay(modifier: Modifier) {
 }
 
 @Composable
+actual fun DownloadImagePause(modifier: Modifier) {
+    Image(
+        getCachedPainter(R.drawable.ic_pause),
+        Strings.downloadPlay(),
+        modifier = modifier
+    )
+}
+
+@Composable
 actual fun DownloadImageError(modifier: Modifier) {
     Image(
         getCachedPainter(R.drawable.ic_error),

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="40dp"
+    android:height="40dp"
+    android:viewportWidth="512"
+    android:viewportHeight="512">
+
+    <!-- Change the pathData to create a pause button -->
+    <path
+        android:pathData="M213.333,85.333H170.667C152.64,85.333 138.667,99.307 138.667,117.333V394.667C138.667,412.693 152.64,426.667 170.667,426.667H213.333C231.36,426.667 245.333,412.693 245.333,394.667V117.333C245.333,99.307 231.36,85.333 213.333,85.333Z"/>
+
+    <path
+        android:pathData="M341.333,85.333H298.667C280.64,85.333 266.667,99.307 266.667,117.333V394.667C266.667,412.693 280.64,426.667 298.667,426.667H341.333C359.36,426.667 373.333,412.693 373.333,394.667V117.333C373.333,99.307 359.36,85.333 341.333,85.333Z"
+        android:fillColor="#748AFF" />
+
+</vector>

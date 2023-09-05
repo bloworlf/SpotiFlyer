@@ -39,10 +39,15 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.core.view.WindowCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.session.MediaController
+import androidx.media3.session.SessionToken
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.defaultComponentContext
 import com.arkivanov.mvikotlin.logging.store.LoggingStoreFactory
@@ -53,6 +58,7 @@ import com.google.accompanist.insets.ProvideWindowInsets
 import com.google.accompanist.insets.navigationBarsPadding
 import com.google.accompanist.insets.statusBarsHeight
 import com.google.accompanist.insets.statusBarsPadding
+import com.google.common.util.concurrent.MoreExecutors
 import com.shabinder.common.core_components.ConnectionLiveData
 import com.shabinder.common.core_components.analytics.AnalyticsManager
 import com.shabinder.common.core_components.file_manager.FileManager
@@ -70,6 +76,7 @@ import com.shabinder.common.uikit.configurations.colorOffWhite
 import com.shabinder.common.uikit.screens.SpotiFlyerRootContent
 import com.shabinder.spotiflyer.service.AudioPlaybackService
 import com.shabinder.spotiflyer.service.ForegroundService
+import com.shabinder.spotiflyer.service.MusicPlayerService
 import com.shabinder.spotiflyer.ui.AnalyticsDialog
 import com.shabinder.spotiflyer.ui.NetworkDialog
 import com.shabinder.spotiflyer.ui.PermissionDialog
@@ -105,6 +112,13 @@ class MainActivity : ComponentActivity() {
 
     // Boolean to check if our activity is bound to service or not
     var isServiceBound: Boolean? = null
+
+    /* This is the global variable of the player
+       (which is basically a media controller)
+       you're going to use to control playback,
+       you're not gonna need anything else other than this,
+       which is created from the media controller */
+    lateinit var player: Player
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -166,10 +180,10 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
-        initialise()
+        initialize()
     }
 
-    private fun initialise() {
+    private fun initialize() {
         val isGithubRelease = checkAppSignature(this)
         /*
         * Only Send an `Update Notification` on Github Release Builds
@@ -183,6 +197,15 @@ class MainActivity : ComponentActivity() {
         handleIntentFromExternalActivity()
 
         initForegroundService()
+
+        /* Creating session token (links our UI with service and starts it) */
+        val sessionToken =
+            SessionToken(applicationContext, ComponentName(this, MusicPlayerService::class.java))
+        /* Instantiating our MediaController and linking it to the service using the session token */
+        val mediacontrollerFuture = MediaController.Builder(this, sessionToken).buildAsync()
+        mediacontrollerFuture.addListener({
+            player = mediacontrollerFuture.get()
+        }, MoreExecutors.directExecutor())
     }
 
     /*START: Foreground Service Handlers*/
@@ -356,15 +379,24 @@ class MainActivity : ComponentActivity() {
                     }
 
                     override fun playDownload(trackDetails: TrackDetails) {
-                        val serviceIntent =
-                            Intent(this@MainActivity, AudioPlaybackService::class.java).apply {
-                                putExtra(AudioPlaybackService.EXTRA_TRACK_DETAILS, trackDetails)
-                            }
+//                        val serviceIntent =
+//                            Intent(this@MainActivity, AudioPlaybackService::class.java).apply {
+//                                putExtra(AudioPlaybackService.EXTRA_TRACK_DETAILS, trackDetails)
+//                            }
+//
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//                            startForegroundService(serviceIntent)
+//                        } else {
+//                            startService(serviceIntent)
+//                        }
+                        runOnUiThread {
+                            loadMediaItem(trackDetails.outputFilePath.toUri())
+                        }
+                    }
 
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                            startForegroundService(serviceIntent)
-                        } else {
-                            startService(serviceIntent)
+                    override fun pauseDownload(trackDetails: TrackDetails) {
+                        runOnUiThread {
+                            player.pause()
                         }
                     }
 
@@ -372,6 +404,19 @@ class MainActivity : ComponentActivity() {
                 }
             }
         )
+
+    fun loadMediaItem(uri: Uri) {
+        /* We use setMediaId as a unique identifier for the media (which is needed for mediasession and we do NOT use setUri because we're gonna do
+           something like setUri(mediaItem.mediaId) when we need to load the media like we did above in the MusicPlayerService and more precisely when we were building the session */
+        val newItem = MediaItem.Builder()
+            .setMediaId("$uri") /* setMediaId and NOT setUri */
+            .build()
+
+        /* Load it into our activity's MediaController */
+        player.setMediaItem(newItem)
+        player.prepare()
+        player.play()
+    }
 
     private fun queryActiveTracks() {
         lifecycleScope.launch {

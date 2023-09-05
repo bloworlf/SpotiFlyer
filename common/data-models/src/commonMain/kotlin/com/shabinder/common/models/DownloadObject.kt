@@ -41,6 +41,7 @@ data class TrackDetails(
     val progress: Int = 2,
     val downloadLink: String? = null,
     val downloaded: DownloadStatus = DownloadStatus.NotDownloaded,
+    val playing: PlayStatus = PlayStatus.NotPlaying,
     var audioQuality: AudioQuality = AudioQuality.KBPS192,
     var audioFormat: AudioFormat = AudioFormat.MP4,
     var outputFilePath: String, // UriString in Android
@@ -57,4 +58,12 @@ sealed class DownloadStatus : Parcelable {
     @Parcelize object NotDownloaded : DownloadStatus()
     @Parcelize object Converting : DownloadStatus()
     @Parcelize data class Failed(val error: Throwable) : DownloadStatus()
+}
+
+@Serializable
+sealed class PlayStatus: Parcelable {
+    @Parcelize object Play: PlayStatus()
+    @Parcelize object Playing : PlayStatus()
+    @Parcelize object NotPlaying : PlayStatus()
+    @Parcelize object Paused : PlayStatus()
 }

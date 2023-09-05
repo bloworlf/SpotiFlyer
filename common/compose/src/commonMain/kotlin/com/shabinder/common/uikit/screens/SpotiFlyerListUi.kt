@@ -58,10 +58,12 @@ import com.shabinder.common.list.SpotiFlyerList
 import com.shabinder.common.models.DownloadStatus
 import com.shabinder.common.models.TrackDetails
 import com.shabinder.common.models.Actions
+import com.shabinder.common.models.PlayStatus
 import com.shabinder.common.translations.Strings
 import com.shabinder.common.uikit.DownloadAllImage
 import com.shabinder.common.uikit.DownloadImageArrow
 import com.shabinder.common.uikit.DownloadImageError
+import com.shabinder.common.uikit.DownloadImagePause
 import com.shabinder.common.uikit.DownloadImagePlay
 import com.shabinder.common.uikit.DownloadImageTick
 import com.shabinder.common.uikit.ImageLoad
@@ -94,7 +96,11 @@ fun SpotiFlyerListContent(
         val result = model.queryResult
         if (result == null) {
             /* Loading Bar */
-            Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+            Column(
+                Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
                 CircularProgressIndicator()
                 Spacer(modifier.padding(8.dp))
                 Text("${Strings.loading()}...", style = appNameStyle, color = colorPrimary)
@@ -114,6 +120,7 @@ fun SpotiFlyerListContent(
                             track = item,
                             downloadTrack = { component.onDownloadClicked(item) },
                             playTrack = { component.onPlayClicked(item) },
+                            pauseTrack = { component.onPauseClicked(item) },
                             loadImage = { component.loadImage(item.albumArtURL) }
                         )
                     }
@@ -156,9 +163,13 @@ fun TrackCard(
     track: TrackDetails,
     downloadTrack: () -> Unit,
     playTrack: () -> Unit,
+    pauseTrack: () -> Unit,
     loadImage: suspend () -> Picture
 ) {
-    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp)
+    ) {
         ImageLoad(
             track.albumArtURL,
             { loadImage() },
@@ -168,32 +179,57 @@ fun TrackCard(
                 .height(70.dp)
                 .clip(MaterialTheme.shapes.medium)
         )
-        Column(modifier = Modifier.padding(horizontal = 8.dp).height(60.dp).weight(1f), verticalArrangement = Arrangement.SpaceEvenly) {
-            Text(track.title, maxLines = 1, overflow = TextOverflow.Ellipsis, style = SpotiFlyerTypography.h6, color = colorAccent)
+        Column(
+            modifier = Modifier.padding(horizontal = 8.dp).height(60.dp).weight(1f),
+            verticalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Text(
+                track.title,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                style = SpotiFlyerTypography.h6,
+                color = colorAccent
+            )
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.Bottom,
                 modifier = Modifier.padding(horizontal = 8.dp).fillMaxSize()
             ) {
                 Text("${track.artists.firstOrNull()}...", fontSize = 12.sp, maxLines = 1)
-                Text("${track.durationSec / 60} ${Strings.minute()}, ${track.durationSec % 60} ${Strings.second()}", fontSize = 12.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(
+                    "${track.durationSec / 60} ${Strings.minute()}, ${track.durationSec % 60} ${Strings.second()}",
+                    fontSize = 12.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
             }
         }
         when (track.downloaded) {
             is DownloadStatus.Downloaded -> {
 //                DownloadImageTick()
-//                Thread(Runnable {  }).start()
-                DownloadImagePlay(
-                    Modifier.clickable(
-                        onClick = {
-                            playTrack()
-                        }
+                if (track.playing == PlayStatus.Playing) {
+                    DownloadImagePause(
+                        Modifier.clickable(
+                            onClick = {
+                                pauseTrack()
+                            }
+                        )
                     )
-                )
+                } else {
+                    DownloadImagePlay(
+                        Modifier.clickable(
+                            onClick = {
+                                playTrack()
+                            }
+                        )
+                    )
+                }
             }
+
             is DownloadStatus.Queued -> {
                 CircularProgressIndicator()
             }
+
             is DownloadStatus.Failed -> {
                 val (openErrorDialog, dismissErrorDialog) = ErrorInfoDialog((track.downloaded as DownloadStatus.Failed).error)
 
@@ -212,12 +248,15 @@ fun TrackCard(
                     )
                 )
             }
+
             is DownloadStatus.Downloading -> {
                 CircularProgressIndicator(progress = (track.downloaded as DownloadStatus.Downloading).progress.toFloat() / 100f)
             }
+
             is DownloadStatus.Converting -> {
                 CircularProgressIndicator(progress = 100f, color = colorAccent)
             }
+
             is DownloadStatus.NotDownloaded -> {
                 DownloadImageArrow(
                     Modifier.clickable(
@@ -270,7 +309,13 @@ fun DownloadAllButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
     ExtendedFloatingActionButton(
         text = { Text(Strings.downloadAll()) },
         onClick = onClick,
-        icon = { Icon(DownloadAllImage(), Strings.downloadAll() + Strings.button(), tint = Color(0xFF000000)) },
+        icon = {
+            Icon(
+                DownloadAllImage(),
+                Strings.downloadAll() + Strings.button(),
+                tint = Color(0xFF000000)
+            )
+        },
         backgroundColor = colorAccent,
         modifier = modifier
     )

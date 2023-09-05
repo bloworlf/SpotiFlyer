@@ -50,6 +50,11 @@ interface SpotiFlyerList {
     fun onPlayClicked(track: TrackDetails)
 
     /*
+    * Play the track (if already downloaded)
+    * */
+    fun onPauseClicked(track: TrackDetails)
+
+    /*
     * To Pop and return back to Main Screen
     * */
     fun onBackPressed()
@@ -87,6 +92,7 @@ interface SpotiFlyerList {
     }
 
     data class State(
+//        val mediaController: MediaController? = null,
         val queryResult: PlatformQueryResult? = null,
         val link: String = "",
         val trackList: List<TrackDetails> = emptyList(),
